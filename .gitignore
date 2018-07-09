@@ -1,0 +1,15 @@
+
+out/
+bin/
+.idea/
+*.iml
+
+.dub/
+.logs/
+.out/
+
+*.exe
+*.lib
+
+images/*
+models/*
