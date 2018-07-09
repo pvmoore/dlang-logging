@@ -1,5 +1,4 @@
-# Dlang OPENGL3 Library
+# Dlang Logging Library
 
 ## Requirements
 - Dlang https://dlang.org/
-- OpenGL 3
