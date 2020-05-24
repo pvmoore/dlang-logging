@@ -10,6 +10,14 @@ public:
 
 import logger;
 
+private:
+
+__gshared File file;
+__gshared globalLevel = Level.INFO;
+__gshared bool eagerFlushing = false;
+
+public:
+
 enum Level : int {
 	FINE=0,
 	INFO,
@@ -17,13 +25,13 @@ enum Level : int {
 	ERROR
 }
 
-__gshared File file;
-__gshared globalLevel = Level.INFO;
-
 shared static ~this() {
     file.close();
 }
 
+void setEagerFlushing(bool flag) {
+	eagerFlushing = flag;
+}
 void setLogLevel(Level level) { globalLevel = level; }
 
 void logfine(A...)(string fmt, A args) nothrow {
@@ -37,6 +45,14 @@ void log(A...)(string fmt, A args) nothrow {
 }
 void log(string str) nothrow {
 	doLog(str, Level.INFO);
+}
+void logf(A...)(string fmt, A args) nothrow {
+	doLog(fmt, Level.INFO, args);
+    flushLog();
+}
+void logf(string str) nothrow {
+	doLog(str, Level.INFO);
+    flushLog();
 }
 void loginfo(A...)(string fmt, A args) nothrow {
 	doLog(fmt, Level.INFO, args);
@@ -99,13 +115,16 @@ void doLog(string str, Level level) nothrow {
 		string dateTime = "[%02u:%02u:%02u.%03u] "
 		    .format(dt.hour, dt.minute, dt.second, dt.fracSecs.total!("msecs"));
 		file.write(dateTime);
-		
+
 		if(level==Level.WARNING) file.write("WARNING! ");
-		else if(level==Level.ERROR) file.write("ERROR! ");	
-		
+		else if(level==Level.ERROR) file.write("ERROR! ");
+
 		file.write(str);
 		file.write("\n");
 		//file.flush();	// uncomment this for debugging purposes
+
+		if(eagerFlushing) file.flush();
+
 	}catch(Exception e) {
 		dang(e.msg);
 	}
