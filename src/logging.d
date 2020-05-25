@@ -38,6 +38,14 @@ void log(A...)(string fmt, A args) nothrow {
 void log(string str) nothrow {
 	doLog(str, Level.INFO);
 }
+void logf(A...)(string fmt, A args) nothrow {
+	doLog(fmt, Level.INFO, args);
+    flushLog();
+}
+void logf(string str) nothrow {
+	doLog(str, Level.INFO);
+    flushLog();
+}
 void loginfo(A...)(string fmt, A args) nothrow {
 	doLog(fmt, Level.INFO, args);
 }

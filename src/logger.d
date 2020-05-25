@@ -6,12 +6,18 @@ import std.format	: format;
 
 
 final class FileLogger {
+
+
     this(string filename) {
         this.filename = filename;
         this.file     = File(filename, "w");
     }
     ~this() {
         file.close();
+    }
+    FileLogger setEagerFlushing(bool flag) {
+        this.eagerFlush = flag;
+        return this;
     }
     void flush() nothrow {
         try{
@@ -33,6 +39,7 @@ final class FileLogger {
 private:
     string filename;
     File file;
+    bool eagerFlush = false;
 
     void doLog(string str) nothrow {
     	try{
@@ -46,6 +53,8 @@ private:
     		file.write(dateTime);
     		file.write(str);
     		file.write("\n");
+
+            if(eagerFlush) file.flush();
     	}catch(Exception e) {}
     }
 }
