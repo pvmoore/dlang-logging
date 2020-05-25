@@ -34,6 +34,11 @@ void setEagerFlushing(bool flag) {
 }
 void setLogLevel(Level level) { globalLevel = level; }
 
+
+void log(T, A...)(T src, string fmt, A args) if(is(T==class) || is(T==interface)) {
+	doLog("[%s] ".format(T.stringof) ~ format(fmt, args), Level.INFO);
+}
+
 void logfine(A...)(string fmt, A args) nothrow {
 	doLog(fmt, Level.FINE, args);
 }

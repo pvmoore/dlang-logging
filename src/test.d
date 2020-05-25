@@ -21,5 +21,14 @@ void main(string[] args) {
     auto logger = new FileLogger(".logs/log2.txt");
     logger.log("hello");
     logger.log("My number is %s", 17);
+
+
+    class MyClass {
+
+    }
+    auto mc = new MyClass;
+
+    mc.log("I am some logging %s", 77);
+
 }
 
