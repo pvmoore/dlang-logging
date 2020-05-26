@@ -36,7 +36,15 @@ void setLogLevel(Level level) { globalLevel = level; }
 
 
 void log(T, A...)(T src, string fmt, A args) if(is(T==class) || is(T==interface)) {
-	doLog("[%s] ".format(T.stringof) ~ format(fmt, args), Level.INFO);
+	enum MAXLEN = 12;
+
+	static if(T.stringof.length > MAXLEN) {
+		string name = T.stringof[0..MAXLEN-2] ~ "..";
+		doLog("[%s] ".format(name) ~ format(fmt, args), Level.INFO);
+
+	} else {
+		doLog("[%-*s] ".format(MAXLEN, T.stringof) ~ format(fmt, args), Level.INFO);
+	}
 }
 
 void logfine(A...)(string fmt, A args) nothrow {
