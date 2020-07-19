@@ -36,15 +36,25 @@ void setLogLevel(Level level) { globalLevel = level; }
 
 
 void log(T, A...)(T src, string fmt, A args) if(is(T==class) || is(T==interface)) {
-	enum MAXLEN = 12;
+	import std;
 
-	static if(T.stringof.length > MAXLEN) {
-		string name = T.stringof[0..MAXLEN-2] ~ "..";
-		doLog("[%s] ".format(name) ~ format(fmt, args), Level.INFO);
-
+	// Remove template types
+	static if(T.stringof.indexOf('!')!=-1) {
+		string name = T.stringof[0..T.stringof.indexOf('!')];
 	} else {
-		doLog("[%-*s] ".format(MAXLEN, T.stringof) ~ format(fmt, args), Level.INFO);
+		string name = T.stringof;
 	}
+
+	doLog("[%s] ".format(name) ~ format(fmt, args), Level.INFO);
+
+	// enum MAXLEN = 15;
+	// static if(T.stringof.length > MAXLEN) {
+	// 	string name = T.stringof[0..MAXLEN-2] ~ "..";
+	// 	doLog("[%s] ".format(name) ~ format(fmt, args), Level.INFO);
+
+	// } else {
+	// 	doLog("[%-*s] ".format(MAXLEN, T.stringof) ~ format(fmt, args), Level.INFO);
+	// }
 }
 
 void logfine(A...)(string fmt, A args) nothrow {
