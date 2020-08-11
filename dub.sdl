@@ -1,7 +1,7 @@
 
 name "logging"
 platforms "windows"
-	
+
 buildType "debug" {
 	buildOptions "debugMode" "debugInfo" "alwaysStackFrame" "stackStomping" "warningsAsErrors"
 }
@@ -16,6 +16,6 @@ configuration "test" {
 }
 configuration "library" {
 	targetType "library"
-	# excludedSourceFiles "src/test.d"
+	excludedSourceFiles "src/test.d"
 }
 
